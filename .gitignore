@@ -1,0 +1,9 @@
+*.txt
+
+VisualServer/gps_map.html
+
+server/data/*
+
+!server/data
+
+!barefoot

@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/arcueid/数字人文与空间计算/final/VisualServer/obj/Debug/net8.0/scopedcss/projectbundle/VisualServer.bundle.scp.css",
+      "PackagePath": "staticwebassets/VisualServer.bundle.scp.css"
+    },
+    {
+      "Id": "/Users/arcueid/数字人文与空间计算/final/VisualServer/wwwroot/app.css",
+      "PackagePath": "staticwebassets/app.css"
+    },
+    {
+      "Id": "/Users/arcueid/数字人文与空间计算/final/VisualServer/wwwroot/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/arcueid/数字人文与空间计算/final/VisualServer/wwwroot/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/arcueid/数字人文与空间计算/final/VisualServer/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.VisualServer.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.VisualServer.props",
+      "PackagePath": "build\\VisualServer.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.VisualServer.props",
+      "PackagePath": "buildMultiTargeting\\VisualServer.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.VisualServer.props",
+      "PackagePath": "buildTransitive\\VisualServer.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

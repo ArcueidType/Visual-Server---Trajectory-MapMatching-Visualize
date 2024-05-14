@@ -1,0 +1,97 @@
+@page "/showtrip"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<PageTitle>Show Trip</PageTitle>
+
+<h1>See Trip on Open Street Map</h1>
+
+<h2>Total Trips: @GetPathsNum()</h2>
+
+<h4>Click the corresponding button to view in an open street map</h4>
+
+@for (int i=1; i<=path_count; i++) {
+    var path_id = i - 1;
+
+    <button style="width:100px;height:50px;" onclick="@(() => SendRequest(path_id))">
+        Trip @i
+    </button>
+}
+
+@* <input placeholder="A path ID" @bind="path_to_add" />
+<button @onclick="AddPath">Add path</button>
+<button @onclick="SendRequest">Try Server</button> *@
+
+<script>
+    var newWindow
+
+    function makeNewWindow () {
+        newWindow = window.open("", "_blank")
+    }
+    
+    window.showPathOnMap = (pageContent) => {
+        makeNewWindow()
+        newWindow.focus()
+        newWindow.document.write(pageContent)
+        newWindow.document.close()
+    }
+</script>
+
+@code {
+    private List<PathTrip> paths = new();
+    private string path_to_add = string.Empty;
+    private int path_count = 0;
+
+    private string? GetPathsNum() {
+        string dir_path = "../paths_count.txt";
+        using (StreamReader sr = new StreamReader(dir_path)) {
+            string? line;
+            line = sr.ReadLine();
+            bool valid = int.TryParse(line, out path_count);
+            if(!valid) {
+                path_count = -1;
+                return string.Empty;
+            }
+            return line;
+        }
+    }
+    
+    private void AddPath() {
+        if(!string.IsNullOrWhiteSpace(path_to_add)) {
+            paths.Add(new PathTrip { PathID = path_to_add });
+            path_to_add = string.Empty;
+        }
+    }
+
+    private void SendRequest(int path_to_depict) {
+        try {
+            Socket ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPAddress IP = IPAddress.Parse("127.0.0.1");
+            int Port = 10001;
+            IPEndPoint endPoint = new IPEndPoint(IP, Port);
+            ClientSocket.Connect(endPoint);
+
+            byte[] send = new byte[1024];
+            send = Encoding.ASCII.GetBytes(Convert.ToString(path_to_depict));
+            ClientSocket.Send(send);
+
+            byte[] recv = new byte[1024];
+            ClientSocket.Receive(recv);
+            ClientSocket.Close();
+
+            ShowPathOnMap();
+        }
+        catch { }
+    }
+
+    private string GetFileContent() {
+        StreamReader sr = new StreamReader("./match_map.html");
+        string content = sr.ReadToEnd();
+        return content;
+    }
+
+    private async Task ShowPathOnMap() {
+        string content = GetFileContent();
+        await JS.InvokeVoidAsync("showPathOnMap", content);
+    }
+}

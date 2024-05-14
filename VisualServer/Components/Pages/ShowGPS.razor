@@ -1,0 +1,84 @@
+@page "/showgpsandtrip"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<PageTitle>Show GPS With Matched Trip</PageTitle>
+
+<h1>See GPS points and corresponding trip on Open Street Map</h1>
+
+<h2>Total GPS: @GetGPSNum()</h2>
+
+<h4>Click the corresponding button to view in an open street map</h4>
+
+@for (int i=1; i<=gps_count; i++) {
+    var gps_id = i - 1;
+
+    <button style="width:100px;height:50px;" onclick="@(() => SendRequest(gps_id))">
+        GPS @i
+    </button>
+}
+
+<script>
+    var newWindow
+
+    function makeNewWindow () {
+        newWindow = window.open("", "_blank")
+    }
+
+    window.showGPSOnMap = (pageContent) => {
+        makeNewWindow()
+        newWindow.focus()
+        newWindow.document.write(pageContent)
+        newWindow.document.close()
+    }
+</script>
+
+@code {
+    private int gps_count = 0;
+
+    private string GetGPSNum() {
+        string dir_path = "../gps_count.txt";
+        using (StreamReader sr = new StreamReader(dir_path)) {
+            string? line;
+            line = sr.ReadLine();
+            bool valid = int.TryParse(line, out gps_count);
+            if(!valid) {
+                gps_count = -1;
+                return string.Empty;
+            }
+            return line;
+        }
+    }
+
+    private void SendRequest(int gps_to_depict) {
+        try {
+            Socket ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPAddress IP = IPAddress.Parse("127.0.0.1");
+            int Port = 10002;
+            IPEndPoint endPoint = new IPEndPoint(IP, Port);
+            ClientSocket.Connect(endPoint);
+
+            byte[] send = new byte[1024];
+            send = Encoding.ASCII.GetBytes(Convert.ToString(gps_to_depict));
+            ClientSocket.Send(send);
+
+            byte[] recv = new byte[1024];
+            ClientSocket.Receive(recv);
+            ClientSocket.Close();
+
+            ShowGPSOnMap();
+        }
+        catch { }
+    }
+
+    private string GetFileContent() {
+        StreamReader sr = new StreamReader("./gps_map.html");
+        string content = sr.ReadToEnd();
+        return content;
+    }
+
+    private async Task ShowGPSOnMap() {
+        string content = GetFileContent();
+        await JS.InvokeVoidAsync("showGPSOnMap", content);
+    } 
+}
