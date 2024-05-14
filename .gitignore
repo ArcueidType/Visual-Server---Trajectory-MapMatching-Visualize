@@ -4,6 +4,8 @@ VisualServer/gps_map.html
 
 server/data/*
 
+.DS_Store
+
 !server/data
 
 !barefoot
