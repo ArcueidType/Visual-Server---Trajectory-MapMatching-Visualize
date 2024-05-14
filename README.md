@@ -22,9 +22,11 @@ $$
 
 我们将利用该轨迹数据，通过Hidden Markov map matching [1]，将其与路网上的路段进行匹配，并在可交互式地图上可视化匹配的结果。
 
+源码位于仓库[Visual Server](https://github.com/ArcueidType/Visual-Server---Trajectory-MapMatching-Visualize)
+
 ### 部分代码参考以下仓库：
 
--  [Barefoot](https://github.com/boathit/barefoot)
+- [Barefoot](https://github.com/boathit/barefoot)
 - [DeepGTT](https://github.com/boathit/deepgtt) [2]
 
 ## 基础环境准备
